@@ -41,6 +41,7 @@ import com.example.duanbe.response.ChiTietSanPhamView;
 import com.example.duanbe.response.HoaDonChiTietResponse;
 import com.example.duanbe.response.HoaDonResponse;
 import com.example.duanbe.response.VoucherBHResponse;
+import com.example.duanbe.service.PaymentEmailService;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -75,6 +76,9 @@ public class BanHangController {
   private UpdateAll updateAll;
   @Autowired
   private JavaMailSender mailSender;
+
+  @Autowired
+  private PaymentEmailService paymentEmailService;
 
   @PostMapping("/addKhHD")
   public ResponseEntity<?> addKhHd(
@@ -233,6 +237,7 @@ public class BanHangController {
       }
 
       // ✅ Trả về HoaDonResponse đầy đủ
+      paymentEmailService.sendPaymentSuccessEmailAsync(idHD);
       return ResponseEntity.ok(getFullInvoiceResponse(idHD));
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

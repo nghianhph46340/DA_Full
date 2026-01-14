@@ -6,6 +6,7 @@ import com.example.duanbe.entity.Voucher;
 import com.example.duanbe.repository.HoaDonRepo;
 import com.example.duanbe.repository.HoaDonChiTietRepo;
 import com.example.duanbe.repository.VoucherRepository;
+import com.example.duanbe.service.PaymentEmailService;
 import com.example.duanbe.service.ZaloPayService;
 import com.example.duanbe.utils.HMACUtil;
 import com.google.gson.Gson;
@@ -40,6 +41,9 @@ public class ZaloPayController {
     private VoucherRepository voucherRepo;
 
     private final Gson gson = new Gson();
+
+    @Autowired
+    private PaymentEmailService paymentEmailService;
 
     /**
      * Tạo đơn hàng ZaloPay và trả về QR code
@@ -170,6 +174,7 @@ public class ZaloPayController {
                 hoaDon.setTrang_thai("Hoàn thành"); // ✅ ĐÃ SỬA: Đã xác nhận, chưa hoàn thành
                 hoaDon.setHinh_thuc_thanh_toan("Chuyển khoản"); // ✅ ZaloPay = Chuyển khoản
                 hoaDonRepo.save(hoaDon);
+                paymentEmailService.sendPaymentSuccessEmailAsync(idHoaDon);
             } else {
                 System.out.println(">>> CHƯA THANH TOÁN - Return Code: " + result.get("return_code"));
             }
@@ -214,6 +219,7 @@ public class ZaloPayController {
                     hoaDon.setTrang_thai("Hoàn thành"); // ✅ ĐÃ SỬA: Đã xác nhận
                     hoaDon.setHinh_thuc_thanh_toan("Chuyển khoản"); // ✅ ZaloPay = Chuyển khoản
                     hoaDonRepo.save(hoaDon);
+                    paymentEmailService.sendPaymentSuccessEmailAsync(hoaDon.getId_hoa_don());
                     System.out.println("Cập nhật trạng thái hóa đơn thành công cho app_trans_id: " + appTransId);
                     result.put("return_code", 1);
                     result.put("return_message", "success");
