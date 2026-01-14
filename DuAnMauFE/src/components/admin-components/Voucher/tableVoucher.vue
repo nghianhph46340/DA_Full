@@ -6,22 +6,22 @@
         <span class="fw-bold me-2" style="font-size: 16px;">Trạng thái:</span>
         <div class="form-check form-check-inline">
           <input class="form-check-input" type="radio" name="trangThai" id="sapDienRa" value="Sắp diễn ra"
-            v-model="selectedTrangThai" @change="fetchData(0)">
+            v-model="selectedTrangThai" @change="onStatusChange">
           <label class="form-check-label" for="sapDienRa">Sắp diễn ra</label>
         </div>
         <div class="form-check form-check-inline">
           <input class="form-check-input" type="radio" name="trangThai" id="dangDienRa" value="Đang diễn ra"
-            v-model="selectedTrangThai" @change="fetchData(0)">
+            v-model="selectedTrangThai" @change="onStatusChange">
           <label class="form-check-label" for="dangDienRa">Đang diễn ra</label>
         </div>
         <div class="form-check form-check-inline">
           <input class="form-check-input" type="radio" name="trangThai" id="daKetThuc" value="Đã kết thúc"
-            v-model="selectedTrangThai" @change="fetchData(0)">
+            v-model="selectedTrangThai" @change="onStatusChange">
           <label class="form-check-label" for="daKetThuc">Đã kết thúc</label>
         </div>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="trangThai" id="tatCa" value=""
-            v-model="selectedTrangThai" @change="fetchData(0)">
+       <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="trangThai" id="tatCa" value="" 
+            v-model="selectedTrangThai" @change="onStatusChange">
           <label class="form-check-label" for="tatCa">Tất cả</label>
         </div>
       </div>
@@ -165,9 +165,20 @@ const endDate = ref(null);
 const simpleImage = Empty.PRESENTED_IMAGE_SIMPLE; // Định nghĩa simpleImage
 
 let refreshInterval = null;
+let isFilterChanging = false; // ✅ Flag to prevent watcher race condition
+
+// ✅ FIX: Set flag BEFORE clearing search to prevent watcher race condition
+const onStatusChange = () => {  
+  isFilterChanging = true;    // Set flag first!
+  store.voucherSearchs = '';  // Clear search (watcher will skip)
+  fetchData(0);
+};
 
 const fetchData = async (page = 0) => {
-  if (page < 0 || page >= store.voucherTotalPages) return;
+  // ✅ FIX: Only check page < 0, remove the buggy totalPages check
+  // Previous bug: when totalPages = 0, condition "page >= totalPages" = "0 >= 0" = true
+  // This caused early return and NO API call!
+  if (page < 0) return;
   store.voucherCurrentPage = page;
 
   try {
@@ -246,7 +257,12 @@ const formatDate = (dateStr) => {
   });
 };
 
+// ✅ Watch search - skip if filter is changing to prevent race condition
 watch(() => store.voucherSearchs, async (newValue) => {
+  if (isFilterChanging) {
+    isFilterChanging = false;
+    return; // Skip this watch trigger
+  }
   if (!newValue || newValue.trim() === '') {
     await fetchData(0);
   } else {
@@ -254,15 +270,9 @@ watch(() => store.voucherSearchs, async (newValue) => {
   }
 });
 
-
-
-watch([startDate, endDate], async () => {
-  await fetchData(0);
-});
-
-watch([pageSize, selectedTrangThai, selectedKieuGiamGia], async () => {
-  await fetchData(0);
-});
+// ✅ REMOVED conflicting watchers - let radio buttons handle it
+// watch([startDate, endDate], ...) → causing duplicates
+// watch([pageSize, selectedTrangThai, ...]) → causing duplicates
 
 onMounted(async () => {
   await store.getAllVouchers(0, pageSize.value);

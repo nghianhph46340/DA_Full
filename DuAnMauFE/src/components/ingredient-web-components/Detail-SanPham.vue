@@ -318,7 +318,7 @@
                                     <div class="rec-product-price-row">
                                         <span class="rec-product-price">{{ rec.price }}</span>
                                         <span class="rec-product-old-price" v-if="rec.oldPrice">{{ rec.oldPrice
-                                        }}</span>
+                                            }}</span>
                                         <span class="rec-product-discount" v-if="rec.discount">{{ rec.discount }}</span>
                                     </div>
                                     <h6 class="rec-product-name">{{ rec.name }}</h6>
@@ -351,7 +351,7 @@
                                 <span class="rec-current-price">{{ selectedRecProduct?.price }}</span>
                                 <span class="rec-old-price" v-if="selectedRecProduct?.oldPrice">{{
                                     selectedRecProduct?.oldPrice
-                                }}</span>
+                                    }}</span>
                                 <span class="rec-discount-badge" v-if="selectedRecProduct?.discount">{{
                                     selectedRecProduct?.discount }}</span>
                             </div>

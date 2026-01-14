@@ -2395,8 +2395,7 @@ const printInvoice = async () => {
   doc.text(`Ngày: ${formatDate(activeTabData.value.hd.ngay_tao)}`, 20, 102);
   doc.text(`Tên khách hàng: ${activeTabData.value.hd.ho_ten || 'Khách lẻ'}`, 20, 110);
   // Kiểm tra nếu là đơn Online/Offline và giao hàng thì hiển thị thêm số điện thoại và địa chỉ
-  if (activeTabData.value.hd.loai_hoa_don === 'Online' || activeTabData.value.hd.loai_hoa_don === 'Offline'
-    && activeTabData.value.hd.phuong_thuc_nhan_hang === 'Giao hàng') {
+  if (activeTabData.value.hd.phuong_thuc_nhan_hang === 'Giao hàng') {
     doc.text(`SĐT: ${activeTabData.value.hd.sdt_nguoi_nhan || ''}`, 110, 110, { align: "left" });
     doc.text(`Địa chỉ: ${activeTabData.value.hd.dia_chi || ''}`, 20, 118);
     y = 126; // cập nhật vị trí `y` sau địa chỉ
@@ -2430,15 +2429,15 @@ const printInvoice = async () => {
     doc.text(`${item.so_luong}`, 110, y, { align: "center" });
 
     // Đơn giá
-    const donGia = item.gia_sau_km && item.gia_sau_km < item.gia_goc ? item.gia_sau_km : item.gia_goc;
-    if (item.gia_sau_giam && item.gia_sau_giam < item.gia_ban) {
+    const donGia = item.gia_ban;
+    if (item.gia_ban) {
       doc.setTextColor(255, 0, 0); // Màu đỏ
     }
     doc.text(`${formatCurrency(donGia)}`, 140, y, { align: "center" });
     doc.setTextColor(0); // Reset màu về đen
 
     // Thành tiền
-    if (item.gia_sau_km && item.gia_sau_km < item.gia_goc) {
+    if (item.don_gia) {
       doc.setTextColor(255, 0, 0); // Màu đỏ
     }
     doc.text(`${formatCurrency(donGia * item.so_luong)}`, 180, y, { align: "center" });

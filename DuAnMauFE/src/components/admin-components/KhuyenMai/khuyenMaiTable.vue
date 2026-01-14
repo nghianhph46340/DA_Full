@@ -6,22 +6,22 @@
         <span class="fw-bold me-2" style="font-size: 16px;">Trạng thái:</span>
         <div class="form-check form-check-inline">
           <input class="form-check-input" type="radio" name="trangThai" id="sapDienRa" value="Sắp diễn ra"
-            v-model="selectedTrangThai" @change="fetchData(0)">
+            v-model="selectedTrangThai" @change="onStatusChange">
           <label class="form-check-label" for="sapDienRa">Sắp diễn ra</label>
         </div>
         <div class="form-check form-check-inline">
           <input class="form-check-input" type="radio" name="trangThai" id="dangDienRa" value="Đang diễn ra"
-            v-model="selectedTrangThai" @change="fetchData(0)">
+            v-model="selectedTrangThai" @change="onStatusChange">
           <label class="form-check-label" for="dangDienRa">Đang diễn ra</label>
         </div>
         <div class="form-check form-check-inline">
           <input class="form-check-input" type="radio" name="trangThai" id="daKetThuc" value="Đã kết thúc"
-            v-model="selectedTrangThai" @change="fetchData(0)">
+            v-model="selectedTrangThai" @change="onStatusChange">
           <label class="form-check-label" for="daKetThuc">Đã kết thúc</label>
         </div>
         <div class="form-check form-check-inline">
           <input class="form-check-input" type="radio" name="trangThai" id="tatCa" value=""
-            v-model="selectedTrangThai" @change="fetchData(0)">
+            v-model="selectedTrangThai" @change="onStatusChange">
           <label class="form-check-label" for="tatCa">Tất cả</label>
         </div>
       </div>
@@ -159,9 +159,18 @@ const endDate = ref(null);
 const simpleImage = Empty.PRESENTED_IMAGE_SIMPLE;
 
 let refreshInterval = null;
+let isFilterChanging = false; // ✅ Flag to prevent watcher race condition
+
+// ✅ FIX: Handler to clear search and prevent watcher race condition
+const onStatusChange = () => {
+  isFilterChanging = true;
+  store.khuyenMaiSearchs = '';
+  fetchData(0);
+};
 
 const fetchData = async (page = 0) => {
-  if (page < 0 || page >= store.khuyenMaiTotalPages) return;
+  // ✅ FIX: Only check page < 0, remove buggy totalPages check
+  if (page < 0) return;
   store.khuyenMaiCurrentPage = page;
 
   try {
@@ -251,7 +260,12 @@ const formatDate = (dateStr) => {
   });
 };
 
+// ✅ Watch search - skip if filter is changing
 watch(() => store.khuyenMaiSearchs, debounce(async (newValue) => {
+  if (isFilterChanging) {
+    isFilterChanging = false;
+    return;
+  }
   if (!newValue || newValue.trim() === '') {
     await store.getAllKhuyenMai(0, pageSize.value);
   } else if (newValue.length >= 2) {
@@ -259,13 +273,12 @@ watch(() => store.khuyenMaiSearchs, debounce(async (newValue) => {
   }
 }, 500));
 
-
-
 watch([startDate, endDate], async () => {
   await fetchData(0);
 });
 
-watch([pageSize, selectedTrangThai, selectedKieuGiamGia], async () => {
+// ✅ FIX: Removed selectedTrangThai from watcher - handled by onStatusChange
+watch(pageSize, async () => {
   await fetchData(0);
 });
 
