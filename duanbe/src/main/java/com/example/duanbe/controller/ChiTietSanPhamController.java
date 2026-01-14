@@ -118,4 +118,13 @@ public class ChiTietSanPhamController {
     public BigDecimal getGiaLonNhat() {
         return chiTietSanPhamService.getMaxGiaBan();
     }
+
+    /**
+     * ✅ NEW: Kiểm tra xem biến thể có đang trong hóa đơn "Đang chờ" không
+     * Dùng để tránh tự động disable biến thể đang được dùng trong POS
+     */
+    @GetMapping("/checkCTSPInPendingInvoice")
+    public ResponseEntity<?> checkCTSPInPendingInvoice(@RequestParam("idCTSP") Integer idCTSP) {
+        return chiTietSanPhamService.checkCTSPInPendingInvoice(idCTSP);
+    }
 }

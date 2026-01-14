@@ -1356,25 +1356,44 @@ const validateSoLuong = async (variant, index) => {
         variant.soLuongHelp = 'Số lượng không được lớn hơn 100.000 sản phẩm vì lý do kho hàng!';
         return false;
     }
-    // ✅ FIX: Tự động chuyển trạng thái khi số lượng = 0
+    // ✅ SMART FIX: Chỉ tự động chuyển trạng thái khi số lượng = 0
+    // VÀ biến thể KHÔNG đang trong hóa đơn "Đang chờ" (POS)
     if (numericValue === 0) {
-        variant.trang_thai = 'Không hoạt động';
-        variant.trang_thai_boolean = false;
-
-        // Nếu là CTSP đã tồn tại, call API ngay
+        // Nếu là CTSP đã tồn tại, kiểm tra xem có trong hóa đơn đang chờ không
         if (variant.id_chi_tiet_san_pham) {
             try {
-                await axiosInstance.put('/admin/quan_ly_san_pham/changeStatusCTSP', null, {
-                    params: { id: variant.id_chi_tiet_san_pham }
+                // ✅ Gọi API kiểm tra xem CTSP có trong hóa đơn đang chờ không
+                const checkResponse = await axiosInstance.get('/admin/quan_ly_san_pham/checkCTSPInPendingInvoice', {
+                    params: { idCTSP: variant.id_chi_tiet_san_pham }
                 });
-                message.warning('Số lượng = 0. Đã tự động chuyển biến thể sang không hoạt động.');
+
+                const isInPendingInvoice = checkResponse.data?.isInPendingInvoice;
+
+                if (isInPendingInvoice) {
+                    // ❌ KHÔNG tự động disable - biến thể đang trong hóa đơn chờ thanh toán
+                    console.log('⚠️ Biến thể đang trong hóa đơn chờ thanh toán, không tự động disable');
+                    message.info('Số lượng = 0 nhưng biến thể đang trong hóa đơn chờ thanh toán. Trạng thái sẽ được giữ nguyên.');
+                    // KHÔNG thay đổi trạng thái
+                } else {
+                    // ✅ An toàn để disable - không ảnh hưởng đến POS
+                    variant.trang_thai = 'Không hoạt động';
+                    variant.trang_thai_boolean = false;
+
+                    await axiosInstance.put('/admin/quan_ly_san_pham/changeStatusCTSP', null, {
+                        params: { id: variant.id_chi_tiet_san_pham }
+                    });
+                    message.warning('Số lượng = 0. Đã tự động chuyển biến thể sang không hoạt động.');
+                }
             } catch (error) {
-                console.error('Lỗi khi chuyển trạng thái CTSP:', error);
-                // Vẫn set trạng thái local nhưng báo warning
-                message.warning('Số lượng = 0. Biến thể sẽ được lưu với trạng thái không hoạt động.');
+                console.error('Lỗi khi kiểm tra/chuyển trạng thái CTSP:', error);
+                // Trong trường hợp lỗi, KHÔNG tự động disable để an toàn
+                message.warning('Không thể kiểm tra trạng thái. Biến thể sẽ được lưu như hiện tại.');
             }
         } else {
-            message.warning('Số lượng = 0. Biến thể sẽ được lưu với trạng thái không hoạt động.');
+            // Biến thể mới (chưa lưu) - an toàn để set không hoạt động
+            variant.trang_thai = 'Không hoạt động';
+            variant.trang_thai_boolean = false;
+            message.warning('Số lượng = 0. Biến thể mới sẽ được lưu với trạng thái không hoạt động.');
         }
     }
 

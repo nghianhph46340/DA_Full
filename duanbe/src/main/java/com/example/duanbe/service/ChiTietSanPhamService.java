@@ -52,6 +52,8 @@ public class ChiTietSanPhamService {
   UpdateAll updateAll;
   @Autowired
   HoaDonService hoaDonService;
+  @Autowired
+  HoaDonChiTietRepo hoaDonChiTietRepo;
 
   // @Cacheable(value = "detailProducts")
   public List<ChiTietSanPhamView> getAllCTSP() {
@@ -176,7 +178,8 @@ public class ChiTietSanPhamService {
       response.put("message", message);
       response.put("data", savedProduct);
       updateAll.updateAll(savedProduct.getId_chi_tiet_san_pham());
-      hoaDonService.updateHDCTByIdCTSP(savedProduct.getId_chi_tiet_san_pham(), promotionRecalculationService.giaMoi());
+      // ✅ NOTE: updateHDCTByIdCTSP đã được tích hợp vào recalculatePromotionPrices
+      // (line 169)
       return ResponseEntity.ok().body(response);
 
     } catch (ResourceNotFoundException e) {
@@ -604,5 +607,36 @@ public class ChiTietSanPhamService {
   // Phương thức tiện ích để kiểm tra danh sách trống hoặc null
   private boolean isEmpty(List<?> list) {
     return list == null || list.isEmpty();
+  }
+
+  /**
+   * ✅ NEW: Kiểm tra xem biến thể có đang trong hóa đơn "Đang chờ" không
+   * Trả về true nếu CTSP đang được dùng trong POS chưa thanh toán
+   */
+  public ResponseEntity<?> checkCTSPInPendingInvoice(Integer idCTSP) {
+    try {
+      List<HoaDonChiTiet> pendingItems = hoaDonChiTietRepo.findHDCTDangChoByCTSP(idCTSP);
+
+      boolean isInPendingInvoice = !pendingItems.isEmpty();
+
+      Map<String, Object> response = new HashMap<>();
+      response.put("isInPendingInvoice", isInPendingInvoice);
+      response.put("count", pendingItems.size());
+
+      if (isInPendingInvoice) {
+        // Thêm thông tin hóa đơn để debug
+        List<Integer> invoiceIds = pendingItems.stream()
+            .map(hdct -> hdct.getHoaDon().getId_hoa_don())
+            .distinct()
+            .collect(java.util.stream.Collectors.toList());
+        response.put("invoiceIds", invoiceIds);
+        response.put("message", "Biến thể đang trong " + invoiceIds.size() + " hóa đơn chờ thanh toán");
+      }
+
+      return ResponseEntity.ok(response);
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+          .body(Map.of("error", e.getMessage(), "isInPendingInvoice", false));
+    }
   }
 }
