@@ -16,9 +16,9 @@
         <div class="filter-header">
           <h3>
             <filter-outlined /> BỘ LỌC SẢN PHẨM
-            <!-- ✅ Badge tổng số bộ lọc active -->
+            <!-- ✨ Elegant badge -->
             <a-badge v-if="totalActiveFilters > 0" :count="totalActiveFilters"
-              :number-style="{ backgroundColor: '#ff6600' }" style="margin-left: 8px;" />
+              :number-style="{ backgroundColor: '#2C3E50', fontWeight: '600' }" style="margin-left: 8px;" />
           </h3>
         </div>
 
@@ -27,7 +27,7 @@
           <h4>
             Loại sản phẩm
             <a-badge v-if="selectedTypes.length > 0" :count="selectedTypes.length"
-              :number-style="{ backgroundColor: '#52c41a', fontSize: '10px' }" />
+              :number-style="{ backgroundColor: '#2C3E50', fontSize: '10px', fontWeight: '600' }" />
           </h4>
           <div class="product-type-container">
             <a-spin v-if="loadingCategories" />
@@ -46,7 +46,7 @@
           <h4>
             Thương hiệu
             <a-badge v-if="selectedBrands.length > 0" :count="selectedBrands.length"
-              :number-style="{ backgroundColor: '#52c41a', fontSize: '10px' }" />
+              :number-style="{ backgroundColor: '#2C3E50', fontSize: '10px', fontWeight: '600' }" />
           </h4>
           <div class="brand-container">
             <a-spin v-if="loadingBrands" />
@@ -65,7 +65,7 @@
           <h4>
             Chất liệu
             <a-badge v-if="selectedMaterials.length > 0" :count="selectedMaterials.length"
-              :number-style="{ backgroundColor: '#52c41a', fontSize: '10px' }" />
+              :number-style="{ backgroundColor: '#2C3E50', fontSize: '10px', fontWeight: '600' }" />
           </h4>
           <div class="material-container">
             <a-spin v-if="loadingMaterials" />
@@ -84,7 +84,7 @@
           <h4>
             Kích thước
             <a-badge v-if="selectedSizes.length > 0" :count="selectedSizes.length"
-              :number-style="{ backgroundColor: '#52c41a', fontSize: '10px' }" />
+              :number-style="{ backgroundColor: '#2C3E50', fontSize: '10px', fontWeight: '600' }" />
           </h4>
           <div class="size-options">
             <a-spin v-if="loadingSizes" />
@@ -103,7 +103,7 @@
           <h4>
             Màu sắc
             <a-badge v-if="selectedColors.length > 0" :count="selectedColors.length"
-              :number-style="{ backgroundColor: '#52c41a', fontSize: '10px' }" />
+              :number-style="{ backgroundColor: '#2C3E50', fontSize: '10px', fontWeight: '600' }" />
           </h4>
           <div class="color-options">
             <a-spin v-if="loadingColors" />
@@ -123,7 +123,7 @@
           <h4>
             Khoảng giá
             <a-badge v-if="selectedPrice[0] !== minPrice || selectedPrice[1] !== maxPrice" :count="1"
-              :number-style="{ backgroundColor: '#52c41a', fontSize: '10px' }" />
+              :number-style="{ backgroundColor: '#2C3E50', fontSize: '10px', fontWeight: '600' }" />
           </h4>
           <a-slider v-model:value="selectedPrice" :min="minPrice" :max="maxPrice" range
             :tip-formatter="formatCurrency" />
@@ -178,7 +178,8 @@
             </a-select>
           </div>
           <a-row :gutter="[24, 24]">
-            <a-col v-for="product in displayedProducts" :key="product.id" :xs="24" :sm="12" :md="8" :lg="6" :xl="6" :xxl="6">
+            <a-col v-for="product in displayedProducts" :key="product.id" :xs="24" :sm="12" :md="8" :lg="6" :xl="6"
+              :xxl="6">
               <div class="product-card" @mouseenter="activeProduct = product.id" @mouseleave="activeProduct = null">
                 <div class="product-image-container">
                   <img class="product-image" :src="product.image" alt="Product image">
@@ -198,7 +199,7 @@
                   <div class="product-price-row">
                     <span class="product-price">{{ formatCurrency(product.price) }}</span>
                     <span class="product-old-price" v-if="product.oldPrice">{{ formatCurrency(product.oldPrice)
-                    }}</span>
+                      }}</span>
                     <span class="product-discount" v-if="product.oldPrice">
                       -{{ Math.round(100 * (1 - product.price / product.oldPrice)) }}%
                     </span>
@@ -881,90 +882,117 @@ const resetFilters = async () => {
 
 .sidebar {
   width: 300px;
-  background: #fff;
-  border-radius: 12px;
+  background: #FFFFFF;
+  border-radius: 8px;
   padding: 0;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 12px rgba(44, 62, 80, 0.08);
   overflow: hidden;
   height: fit-content;
   transition: all 0.3s ease;
+  border: 1px solid #E8EAF0;
 
-  /* ✅ Ghim sidebar khi scroll */
+  /* Ghim sidebar khi scroll */
   position: sticky;
   top: 80px;
-  /* Offset để tránh dính vào header (header khoảng 60-70px) */
   max-height: calc(100vh - 100px);
-  /* Chiều cao tối đa, trừ offset top và bottom */
   overflow-y: auto;
-  /* Cho phép scrollbar riêng nếu nội dung dài */
 }
 
-/* Custom scrollbar cho sidebar */
+/* Premium scrollbar */
 .sidebar::-webkit-scrollbar {
   width: 6px;
 }
 
 .sidebar::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: #F5F7FA;
   border-radius: 10px;
 }
 
 .sidebar::-webkit-scrollbar-thumb {
-  background: #f33b47;
+  background: linear-gradient(180deg, #2C3E50 0%, #34495E 100%);
   border-radius: 10px;
 }
 
 .sidebar::-webkit-scrollbar-thumb:hover {
-  background: #ff5160;
+  background: linear-gradient(180deg, #1A252F 0%, #2C3E50 100%);
 }
 
+/* ✨ Premium elegant header */
 .filter-header {
-  background: linear-gradient(45deg, #f33b47, #ff5160);
+  background: linear-gradient(135deg, #2C3E50 0%, #34495E 100%);
   color: white;
-  padding: 15px 20px;
-  border-radius: 12px 12px 0 0;
+  padding: 20px 24px;
+  border-bottom: 3px solid #1A252F;
+  position: relative;
+  overflow: hidden;
+}
+
+.filter-header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
+  pointer-events: none;
 }
 
 .filter-header h3 {
   margin: 0;
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   color: white;
+  position: relative;
+  z-index: 1;
 }
 
+.filter-header h3 :deep(svg) {
+  font-size: 18px;
+}
+
+/* ✨ Elegant filter groups */
 .filter-group {
   margin: 0;
-  padding: 18px 20px;
-  border-bottom: 1px solid #f0f0f0;
-  transition: background-color 0.2s;
+  padding: 20px 24px;
+  border-bottom: 1px solid #E8EAF0;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.filter-group:last-child {
+  border-bottom: none;
 }
 
 .filter-group:hover {
-  background-color: #f9f9f9;
+  background-color: #F8F9FC;
 }
 
 .filter-group h4 {
-  margin-bottom: 15px;
-  font-size: 15px;
+  margin-bottom: 16px;
+  font-size: 14px;
   font-weight: 600;
-  color: #333;
+  color: #2C3E50;
   position: relative;
-  padding-left: 0;
+  padding-left: 12px;
+  letter-spacing: 0.3px;
 }
 
 .filter-group h4::before {
   content: '';
   position: absolute;
-  left: -20px;
+  left: 0;
   top: 50%;
   transform: translateY(-50%);
-  width: 4px;
+  width: 3px;
   height: 16px;
-  background: #f33b47;
-  border-radius: 10px;
+  background: linear-gradient(180deg, #2C3E50 0%, #34495E 100%);
+  border-radius: 2px;
 }
 
 /* Giới tính */
@@ -1044,71 +1072,88 @@ const resetFilters = async () => {
   gap: 8px;
 }
 
+/* ✨ Premium size tags */
 .size-options .ant-tag {
   cursor: pointer;
-  border-radius: 4px;
-  padding: 4px 12px;
+  border-radius: 6px;
+  padding: 8px 16px;
   font-size: 13px;
+  font-weight: 500;
   margin: 0;
-  border: 1px solid #d9d9d9;
+  border: 1. 5px solid #D5D9E2;
   background: white;
-  transition: all 0.2s;
+  color: #4A5568;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .size-options .ant-tag:hover {
-  border-color: #f33b47;
-  color: #f33b47;
+  border-color: #2C3E50;
+  color: #2C3E50;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(44, 62, 80, 0.15);
 }
 
 .size-tag-active {
-  background-color: #f33b47 !important;
+  background: linear-gradient(135deg, #2C3E50 0%, #34495E 100%) !important;
   color: white !important;
-  border-color: #f33b47 !important;
+  border-color: #2C3E50 !important;
+  box-shadow: 0 4px 12px rgba(44, 62, 80, 0.25) !important;
+  transform: translateY(-1px);
 }
 
-/* Màu sắc */
+/* ✨ Elegant color options */
 .color-options {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 10px;
   margin-top: 10px;
 }
 
 .color-option {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   width: 48%;
-  padding: 5px;
-  border-radius: 4px;
+  padding: 8px;
+  border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.25s ease;
+  border: 1.5px solid transparent;
 }
 
 .color-option:hover {
-  background-color: #f5f5f5;
+  background-color: #F8F9FC;
+  border-color: #E8EAF0;
 }
 
 .color-option.active {
-  background-color: #f9f0f1;
+  background-color: rgba(44, 62, 80, 0.05);
+  border-color: #2C3E50;
 }
 
 .color-dot {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
-  border: 1px solid #ddd;
+  border: 2px solid #E8EAF0;
   display: inline-block;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.color-option.active .color-dot {
+  border-color: #2C3E50;
+  box-shadow: 0 0 0 2px rgba(44, 62, 80, 0.15);
 }
 
 .color-name {
   font-size: 13px;
-  color: #666;
+  color: #4A5568;
+  font-weight: 500;
 }
 
 .active .color-name {
-  color: #f33b47;
-  font-weight: 500;
+  color: #2C3E50;
+  font-weight: 600;
 }
 
 /* Giá */
@@ -1120,68 +1165,76 @@ const resetFilters = async () => {
   margin-top: 12px;
 }
 
-/* Các nút bộ lọc */
+/* ✨ Premium action buttons */
 .filter-actions {
-  padding: 20px;
+  padding: 20px 24px;
   display: flex;
   flex-direction: column;
   gap: 12px;
+  border-top: 1px solid #E8EAF0;
 }
 
 .filter-actions .ant-btn {
-  height: 42px;
+  height: 44px;
   border-radius: 8px;
-  font-weight: 500;
-  transition: all 0.3s ease;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.3px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .filter-actions .ant-btn-primary {
-  background-color: #f33b47;
-  border-color: #f33b47;
-  box-shadow: 0 2px 8px rgba(243, 59, 71, 0.3);
+  background: linear-gradient(135deg, #2C3E50 0%, #34495E 100%);
+  border: none;
+  color: white;
+  box-shadow: 0 4px 12px rgba(44, 62, 80, 0.25);
 }
 
 .filter-actions .ant-btn-primary:hover:not(:disabled) {
-  background-color: #ff5160;
-  border-color: #ff5160;
+  background: linear-gradient(135deg, #1A252F 0%, #2C3E50 100%);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(243, 59, 71, 0.4);
+  box-shadow: 0 6px 20px rgba(44, 62, 80, 0.35);
 }
 
 .filter-actions .ant-btn-primary:active:not(:disabled) {
   transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(44, 62, 80, 0.2);
 }
 
 .reset-button {
-  border: 1px solid #d9d9d9;
-  background: #f5f5f5;
-  color: #666;
+  border: 1.5px solid #D5D9E2;
+  background: white;
+  color: #4A5568;
 }
 
 .reset-button:hover:not(:disabled) {
-  border-color: #f33b47;
-  color: #f33b47;
-  background: #fff7f8;
+  border-color: #2C3E50;
+  color: #2C3E50;
+  background: #F8F9FC;
 }
 
 .reset-button:disabled {
-  opacity: 0.5;
+  opacity: 0.4;
   cursor: not-allowed;
+  background: #F5F7FA;
 }
 
-/* ✅ Preview count styling */
+/* ✨ Elegant preview count */
 .preview-count {
   text-align: center;
-  padding: 8px;
-  background: #fff7f8;
-  border-radius: 6px;
-  border: 1px solid #ffcdd2;
+  padding: 10px;
+  background: rgba(44, 62, 80, 0.05);
+  border-radius: 8px;
+  border: 1px solid rgba(44, 62, 80, 0.1);
 }
 
 .preview-count .ant-tag {
   font-size: 13px;
-  padding: 4px 12px;
+  font-weight: 600;
+  padding: 6px 14px;
   border: none;
+  background: linear-gradient(135deg, #2C3E50 0%, #34495E 100%);
+  color: white;
 }
 
 /* ✅ Badge animations */
@@ -1268,7 +1321,8 @@ const resetFilters = async () => {
   overflow: hidden;
   border-radius: 8px;
   margin-bottom: 12px;
-  aspect-ratio: 3 / 4;  /* ✅ Taller portrait images */
+  aspect-ratio: 3 / 4;
+  /* ✅ Taller portrait images */
 }
 
 .product-image {
@@ -1314,26 +1368,29 @@ const resetFilters = async () => {
 
 .overlay-buttons {
   display: flex;
-  justify-content: center;  /* ✅ Centered */
+  justify-content: center;
+  /* ✅ Centered */
 }
 
 .overlay-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #2C3E50;  /* ✅ Dark elegant color */
+  background: #2C3E50;
+  /* ✅ Dark elegant color */
   border: none;
   border-radius: 6px;
-  padding: 10px 24px;
-  font-size: 13px;
+  padding: 8px 16px;
+  font-size: 11px;
   font-weight: 600;
   color: #FFFFFF;
   cursor: pointer;
   transition: all 0.3s ease;
-  min-width: 140px;
-  letter-spacing: 0.3px;
+  min-width: 120px;
+  letter-spacing: 0.2px;
   text-transform: uppercase;
   box-shadow: 0 2px 8px rgba(44, 62, 80, 0.3);
+  white-space: nowrap;
 }
 
 .overlay-btn span {

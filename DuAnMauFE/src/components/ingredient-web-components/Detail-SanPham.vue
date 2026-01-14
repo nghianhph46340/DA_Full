@@ -318,7 +318,7 @@
                                     <div class="rec-product-price-row">
                                         <span class="rec-product-price">{{ rec.price }}</span>
                                         <span class="rec-product-old-price" v-if="rec.oldPrice">{{ rec.oldPrice
-                                            }}</span>
+                                        }}</span>
                                         <span class="rec-product-discount" v-if="rec.discount">{{ rec.discount }}</span>
                                     </div>
                                     <h6 class="rec-product-name">{{ rec.name }}</h6>
@@ -351,7 +351,7 @@
                                 <span class="rec-current-price">{{ selectedRecProduct?.price }}</span>
                                 <span class="rec-old-price" v-if="selectedRecProduct?.oldPrice">{{
                                     selectedRecProduct?.oldPrice
-                                    }}</span>
+                                }}</span>
                                 <span class="rec-discount-badge" v-if="selectedRecProduct?.discount">{{
                                     selectedRecProduct?.discount }}</span>
                             </div>
@@ -3168,14 +3168,17 @@ const displayStockStatus = computed(() => {
     flex-wrap: wrap;
     gap: 32px;
     margin-bottom: 24px;
-    align-items: flex-start;  /* Align to top */
+    align-items: flex-start;
+    /* Align to top */
 }
 
 /* Kiểu dáng gallery - COMPACT */
 .product-gallery {
-    flex: 0 0 45%;  /* Fixed width instead of flex */
+    flex: 0 0 45%;
+    /* Fixed width instead of flex */
     min-width: 300px;
-    max-width: 500px;  /* Reduced from 600px */
+    max-width: 500px;
+    /* Reduced from 600px */
     opacity: 0;
     transform: translateY(30px);
     transition: opacity 0.5s ease, transform 0.5s ease;
@@ -3480,10 +3483,12 @@ const displayStockStatus = computed(() => {
 }
 
 .color-swatch {
-    width: 48px;
-    height: 48px;
+    width: 36px;
+    /* Reduced from 48px */
+    height: 36px;
     border-radius: 50%;
-    border: 3px solid #E5E7EB;
+    border: 2px solid #E5E7EB;
+    /* Reduced from 3px */
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     transition: all 0.3s ease;
 }
@@ -3534,9 +3539,11 @@ const displayStockStatus = computed(() => {
 
 /* ✅ ELEGANT TITLE - COMPACT */
 .product-title {
-    font-size: 28px;  /* Reduced from 32px */
+    font-size: 28px;
+    /* Reduced from 32px */
     font-weight: 600;
-    margin-bottom: 16px;  /* Reduced spacing */
+    margin-bottom: 16px;
+    /* Reduced spacing */
     color: #1A1A1A;
     letter-spacing: -0.5px;
     line-height: 1.2;
@@ -3552,30 +3559,35 @@ const displayStockStatus = computed(() => {
     background: linear-gradient(90deg, #2C3E50 0%, transparent 100%);
 }
 
-/* ✅ ELEGANT META GRID - COMPACT */
+/* ✅ ELEGANT META GRID - ULTRA COMPACT */
 .product-meta {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 12px;  /* Reduced */
-    margin-bottom: 16px;  /* Reduced */
+    gap: 8px;
+    /* Reduced from 12px */
+    margin-bottom: 10px;
+    /* Reduced from 16px */
     background: #F9FAFB;
-    padding: 16px;  /* Reduced from 20px */
-    border-radius: 8px;
+    padding: 10px 12px;
+    /* Reduced from 16px */
+    border-radius: 6px;
     border: 1px solid #E5E7EB;
 }
 
 .meta-item {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
+    /* Reduced from 8px */
 }
 
 .meta-label {
-    font-size: 13px;
+    font-size: 12px;
+    /* Reduced from 13px */
     font-weight: 500;
     color: #6B7280;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.3px;
 }
 
 .meta-value {
@@ -3587,20 +3599,24 @@ const displayStockStatus = computed(() => {
 .product-price {
     display: flex;
     align-items: baseline;
-    gap: 12px;  /* Reduced */
-    margin-bottom: 16px;  /* Reduced */
-    padding-bottom: 16px;  /* Reduced */
+    gap: 10px;
+    /* Reduced from 12px */
+    margin-bottom: 12px;
+    /* Reduced from 16px */
+    padding-bottom: 12px;
+    /* Reduced from 16px */
     border-bottom: 1px solid #E5E7EB;
 }
 
 .current-price {
-    font-size: 32px;  /* Reduced from 36px */
+    font-size: 32px;
+    /* Reduced from 36px */
     font-weight: 700;
     color: #2C3E50;
     letter-spacing: -0.5px;
 }
 
-.original-price { 
+.original-price {
     font-size: 20px;
     color: #9CA3AF;
     text-decoration: line-through;
@@ -3619,7 +3635,8 @@ const displayStockStatus = computed(() => {
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 14px;
+    /* Reduced from 20px */
 }
 
 .stars {
@@ -3634,14 +3651,16 @@ const displayStockStatus = computed(() => {
 }
 
 .product-colors {
-    margin-bottom: 16px;  /* Reduced from 20px */
+    margin-bottom: 8px;
+    /* Ultra compact */
 }
 
 /* ✅ ELEGANT OPTION TITLES */
 .option-title {
     font-size: 14px;
     font-weight: 600;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
+    /* Reduced from 12px */
     color: #374151;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -3654,7 +3673,8 @@ const displayStockStatus = computed(() => {
 }
 
 .product-sizes {
-    margin-bottom: 16px;  /* Reduced from 20px */
+    margin-bottom: 8px;
+    /* Ultra compact */
 }
 
 .size-options {
@@ -3665,15 +3685,19 @@ const displayStockStatus = computed(() => {
 
 /* ✅ ELEGANT SIZE OPTIONS */
 .size-option {
-    min-width: 56px;
-    height: 56px;
-    padding: 0 20px;
+    min-width: 48px;
+    /* Reduced from 56px */
+    height: 44px;
+    /* Reduced from 56px */
+    padding: 0 16px;
+    /* Reduced from 20px */
     border: 2px solid #E5E7EB;
-    border-radius: 8px;
+    border-radius: 6px;
     cursor: pointer;
     background-color: #fff;
     transition: all 0.3s ease;
     font-weight: 600;
+    font-size: 14px;
     color: #374151;
     display: flex;
     align-items: center;
@@ -3712,7 +3736,8 @@ const displayStockStatus = computed(() => {
 }
 
 .product-quantity {
-    margin-bottom: 16px;  /* Reduced from 20px */
+    margin-bottom: 12px;
+    /* Reduced from 16px */
 }
 
 .quantity-selector {
@@ -3722,8 +3747,9 @@ const displayStockStatus = computed(() => {
 }
 
 .quantity-btn {
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    /* Reduced from 36px */
+    height: 32px;
     border: 1px solid #ddd;
     border-radius: 50%;
     background-color: #fff;
@@ -3732,6 +3758,7 @@ const displayStockStatus = computed(() => {
     align-items: center;
     justify-content: center;
     transition: all 0.2s ease;
+    font-size: 14px;
 }
 
 .quantity-btn:hover:not(:disabled) {
@@ -3746,12 +3773,14 @@ const displayStockStatus = computed(() => {
 }
 
 .quantity-input {
-    width: 60px;
-    height: 36px;
+    width: 50px;
+    /* Reduced from 60px */
+    height: 32px;
+    /* Reduced from 36px */
     border: 1px solid #ddd;
     border-radius: 4px;
-    padding: 5px 10px;
-    font-size: 16px;
+    padding: 4px 8px;
+    font-size: 14px;
     text-align: center;
 }
 
@@ -3771,18 +3800,21 @@ const displayStockStatus = computed(() => {
 
 .product-actions {
     display: flex;
-    gap: 15px;
-    margin-bottom: 30px;
+    gap: 12px;
+    margin-bottom: 16px;
+    /* Reduced from 30px */
 }
 
 /* ✅ ELEGANT PREMIUM BUTTONS - COMPACT */
 .btn-add-to-cart,
 .btn-buy-now {
-    padding: 14px 28px;  /* Reduced from 16px 32px */
+    padding: 14px 28px;
+    /* Reduced from 16px 32px */
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    font-size: 14px;  /* Reduced from 15px */
+    font-size: 14px;
+    /* Reduced from 15px */
     font-weight: 600;
     display: flex;
     align-items: center;
@@ -3799,7 +3831,8 @@ const displayStockStatus = computed(() => {
     color: #FFFFFF;
     box-shadow: 0 4px 12px rgba(44, 62, 80, 0.25);
     flex: 1;
-    position: relative;  /* ✅ REQUIRED for badge positioning */
+    position: relative;
+    /* ✅ REQUIRED for badge positioning */
 }
 
 .btn-add-to-cart:hover:not(:disabled) {
@@ -3891,9 +3924,11 @@ const displayStockStatus = computed(() => {
 
 .product-delivery-info {
     background-color: #f8f9fa;
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 20px;
+    padding: 10px 12px;
+    /* Reduced padding */
+    border-radius: 6px;
+    margin-bottom: 10px;
+    /* Reduced from 20px */
 }
 
 .delivery-item {
@@ -4788,7 +4823,8 @@ const displayStockStatus = computed(() => {
     align-items: center;
     justify-content: center;
     box-shadow: 0 2px 8px rgba(220, 38, 38, 0.4);
-    z-index: 100;  /* ✅ High z-index to always be on top */
+    z-index: 100;
+    /* ✅ High z-index to always be on top */
     border: 2px solid #FFFFFF;
     animation: bounce 1s infinite;
 }
