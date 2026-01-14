@@ -48,6 +48,7 @@ public class KhachHang {
     private String diaChi;
 
     @Column(name = "trang_thai")
+
     private String trangThai;
 
     @Column(name = "ghi_chu")

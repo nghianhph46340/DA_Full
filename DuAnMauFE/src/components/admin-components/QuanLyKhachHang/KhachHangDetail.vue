@@ -41,8 +41,8 @@
               <div class="info-item">
                 <label class="text-muted small">Giới tính</label>
                 <p class="fw-medium mb-0">
-                  <span :class="khachHang.gioiTinh ? 'badge bg-info' : 'badge bg-warning'">
-                    {{ khachHang.gioiTinh ? 'Nam' : 'Nữ' }}
+                  <span :class="formatGenderClass(khachHang.gioiTinh)">
+                    {{ formatGender(khachHang.gioiTinh) }}
                   </span>
                 </p>
               </div>
@@ -153,6 +153,26 @@ const khachHang = ref(null);
 const diaChiList = ref([]);
 const matKhau = ref('');
 
+// ✅ Flexible gender display - handles string or boolean
+const formatGender = (gioiTinh) => {
+  if (gioiTinh === null || gioiTinh === undefined) return 'Chưa xác định';
+
+  if (typeof gioiTinh === 'boolean') {
+    return gioiTinh ? 'Nam' : 'Nữ';
+  }
+
+  const value = String(gioiTinh).toLowerCase().trim();
+  if (value === '1' || value === 'true' || value === 'nam') return 'Nam';
+  if (value === '0' || value === 'false' || value === 'nữ' || value === 'nu') return 'Nữ';
+
+  return 'Chưa xác định';
+};
+
+const formatGenderClass = (gioiTinh) => {
+  const gender = formatGender(gioiTinh);
+  return gender === 'Nam' ? 'badge bg-info' : 'badge bg-warning';
+};
+
 // Hàm định dạng ngày sinh
 const formatDate = (dateString) => {
   if (!dateString) return 'Chưa có ngày sinh';
@@ -193,7 +213,8 @@ onMounted(() => {
 <style scoped>
 /* Tinh chỉnh container để khớp với khung của danh sách khách hàng */
 .container-fluid {
-  padding: 0 ; /* Giữ padding giống container-fluid trong danh sách khách hàng */
+  padding: 0;
+  /* Giữ padding giống container-fluid trong danh sách khách hàng */
 
 }
 
@@ -203,14 +224,17 @@ onMounted(() => {
 .card-header {
   background: linear-gradient(90deg, #007bff, #0056b3);
   padding: 1rem 1.5rem;
-  flex-shrink: 0; /* Không co lại */
+  flex-shrink: 0;
+  /* Không co lại */
 }
 
 .card-body {
   background-color: #f8f9fa;
-  flex: 1; /* Chiếm toàn bộ không gian còn lại */
+  flex: 1;
+  /* Chiếm toàn bộ không gian còn lại */
   padding: 1.5rem;
-  overflow-y: auto; /* Thanh cuộn nếu nội dung vượt quá chiều cao */
+  overflow-y: auto;
+  /* Thanh cuộn nếu nội dung vượt quá chiều cao */
 }
 
 /* Tinh chỉnh section tiêu đề */
@@ -224,7 +248,8 @@ onMounted(() => {
 /* Tinh chỉnh thông tin khách hàng */
 .info-item {
   background: #fff;
-  padding: 0.75rem; /* Giảm padding để tiết kiệm không gian */
+  padding: 0.75rem;
+  /* Giảm padding để tiết kiệm không gian */
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -242,13 +267,15 @@ onMounted(() => {
 }
 
 .info-item p {
-  font-size: 0.95rem; /* Giảm font-size để tiết kiệm không gian */
+  font-size: 0.95rem;
+  /* Giảm font-size để tiết kiệm không gian */
   color: #333;
 }
 
 /* Tinh chỉnh phần danh sách địa chỉ */
 .address-section {
-  margin-top: 1rem; /* Giảm margin-top để tiết kiệm không gian */
+  margin-top: 1rem;
+  /* Giảm margin-top để tiết kiệm không gian */
 }
 
 /* Tinh chỉnh bảng địa chỉ */
@@ -256,14 +283,17 @@ onMounted(() => {
   margin-bottom: 0;
   border-collapse: separate;
   border-spacing: 0;
-  --bs-table-hover-bg: rgba(0, 0, 0, 0.05); /* Giữ style hover giống danh sách khách hàng */
+  --bs-table-hover-bg: rgba(0, 0, 0, 0.05);
+  /* Giữ style hover giống danh sách khách hàng */
 }
 
 .table th,
 .table td {
   vertical-align: middle;
-  padding: 0.5rem; /* Giảm padding để tiết kiệm không gian */
-  font-size: 0.9rem; /* Giảm font-size để tiết kiệm không gian */
+  padding: 0.5rem;
+  /* Giảm padding để tiết kiệm không gian */
+  font-size: 0.9rem;
+  /* Giảm font-size để tiết kiệm không gian */
 }
 
 .table thead th {
@@ -286,7 +316,8 @@ onMounted(() => {
 
 /* Tinh chỉnh badge */
 .badge {
-  font-size: 0.8rem; /* Giảm font-size để tiết kiệm không gian */
+  font-size: 0.8rem;
+  /* Giảm font-size để tiết kiệm không gian */
   padding: 0.3em 0.6em;
   border-radius: 10px;
 }

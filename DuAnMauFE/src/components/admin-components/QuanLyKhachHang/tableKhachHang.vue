@@ -64,7 +64,7 @@
               <td>{{ index + 1 }}</td>
               <td>{{ khachHang.maKhachHang }}</td>
               <td>{{ khachHang.hoTen }}</td>
-              <td>{{ khachHang.gioiTinh ? 'Nam' : 'Nữ' }}</td>
+              <td>{{ formatGender(khachHang.gioiTinh) }}</td>
               <td>{{ formatDate(khachHang.ngaySinh) }}</td>
               <td>{{ khachHang.soDienThoai }}</td>
               <td>{{ khachHang.email }}</td>
@@ -126,6 +126,23 @@ const danhSachKhachHang = computed(() => store.getAllKhachHangArr.slice(0, pageS
 const currentPage = computed(() => store.currentKhachHang);
 const totalPages = computed(() => store.totalKhachHang);
 const diaChiMap = computed(() => store.diaChiMap);
+
+// ✅ Flexible gender display - handles string or boolean
+const formatGender = (gioiTinh) => {
+  if (gioiTinh === null || gioiTinh === undefined) return 'Chưa xác định';
+  
+  // Handle boolean
+  if (typeof gioiTinh === 'boolean') {
+    return gioiTinh ? 'Nam' : 'Nữ';
+  }
+  
+  // Handle string
+  const value = String(gioiTinh).toLowerCase().trim();
+  if (value === '1' || value === 'true' || value === 'nam') return 'Nam';
+  if (value === '0' || value === 'false' || value === 'nữ' || value === 'nu') return 'Nữ';
+  
+  return 'Chưa xác định';
+};
 
 // Hàm định dạng ngày sinh
 const formatDate = (dateString) => {

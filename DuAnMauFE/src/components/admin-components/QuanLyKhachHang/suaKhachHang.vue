@@ -16,8 +16,7 @@
           </a-form-item>
         </a-col>
         <a-col :xs="24" :sm="12" :md="8">
-          <a-form-item label="Họ tên khách hàng" :validate-status="errors.hoTen ? 'error' : ''"
-            :help="errors.hoTen">
+          <a-form-item label="Họ tên khách hàng" :validate-status="errors.hoTen ? 'error' : ''" :help="errors.hoTen">
             <a-input v-model:value="formData.hoTen" placeholder="Nhập tên khách hàng" class="input-field" />
           </a-form-item>
         </a-col>
@@ -421,6 +420,21 @@ const resetForm = () => {
   });
 };
 
+// ✅ Normalize gender value from API (handles string/boolean)
+const normalizeGender = (gioiTinh) => {
+  if (gioiTinh === null || gioiTinh === undefined) return null;
+
+  // Already boolean
+  if (typeof gioiTinh === 'boolean') return gioiTinh;
+
+  // Convert string to boolean
+  const value = String(gioiTinh).toLowerCase().trim();
+  if (value === '1' || value === 'true' || value === 'nam') return true;
+  if (value === '0' || value === 'false' || value === 'nữ' || value === 'nu') return false;
+
+  return null;
+};
+
 const loadKhachHang = async () => {
   try {
     const id = route.params.id;
@@ -436,7 +450,7 @@ const loadKhachHang = async () => {
       idKhachHang: khachHang.idKhachHang,
       maKhachHang: khachHang.maKhachHang,
       hoTen: khachHang.hoTen,
-      gioiTinh: khachHang.gioiTinh,
+      gioiTinh: normalizeGender(khachHang.gioiTinh),  // ✅ Normalize to boolean
       soDienThoai: khachHang.soDienThoai,
       ngaySinh: khachHang.ngaySinh ? dayjs(khachHang.ngaySinh) : null,
       email: khachHang.email,
@@ -760,5 +774,4 @@ onMounted(async () => {
 :deep(.ant-form-item-has-error .ant-picker-focused) {
   box-shadow: 0 0 0 3px rgba(255, 77, 79, 0.1) !important;
 }
-
 </style>

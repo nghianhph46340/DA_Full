@@ -20,12 +20,8 @@
                                 <router-link :to="{ name: 'sanPhamDetail-BanHang', params: { id: product.id } }"
                                     class="overlay-btn view-btn">
                                     <eye-outlined />
-                                    <span>Xem</span>
+                                    <span>Xem chi tiết</span>
                                 </router-link>
-                                <button class="overlay-btn cart-btn" @click="showProductDetail(product)">
-                                    <shopping-cart-outlined />
-                                    <span>Thêm</span>
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -317,18 +313,18 @@ const addToCart = () => {
     display: none;
 }
 
-/* ========== Products Grid - Wide Spacing ========== */
+/* ========== Products Grid - 4 Products Per Row ========== */
 .products-grid {
     padding: 0;
     display: flex;
     flex-wrap: wrap;
-    gap: 16px;
+    gap: 12px;  /* ✅ Comfortable spacing */
     margin-bottom: 48px;
 }
 
 .product-card {
     position: relative;
-    flex: 0 0 calc(20% - 13px);
+    flex: 0 0 calc(25% - 9px);  /* ✅ 4 products per row */
     background-color: #FFFFFF;
     border-radius: 8px;
     overflow: hidden;
@@ -348,11 +344,11 @@ const addToCart = () => {
     border-color: #E5E5E5;
 }
 
-/* ========== Product Image - 3:4 Ratio ========== */
+/* ========== Product Image - 3:4 Portrait (Taller) ========== */
 .product-image-container {
     position: relative;
     overflow: hidden;
-    aspect-ratio: 3/4;
+    aspect-ratio: 3 / 4;  /* ✅ Portrait for taller visibility */
     background: #F5F5F5;
 }
 
@@ -411,23 +407,28 @@ const addToCart = () => {
     align-items: center;
     justify-content: center;
     gap: var(--space-xs);
-    background: var(--color-white);
+    background: #2C3E50;  /* ✅ Dark elegant color */
     border: none;
-    border-radius: var(--radius-md);
-    padding: var(--space-xs) var(--space-md);
-    font-size: var(--text-sm);
-    font-weight: var(--weight-medium);
-    color: var(--color-primary);
+    border-radius: 6px;  /* Subtle rounded corners */
+    padding: 10px 24px;
+    font-size: 13px;
+    font-weight: 600;  /* Bolder for impact */
+    color: #FFFFFF;
     cursor: pointer;
-    transition: all var(--transition-fast);
+    transition: all 0.3s ease;
     text-decoration: none;
     font-family: var(--font-primary);
+    min-width: 140px;
+    letter-spacing: 0.3px;  /* Professional spacing */
+    text-transform: uppercase;  /* Elegant uppercase */
+    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.3);  /* Subtle depth */
 }
 
 .overlay-btn:hover {
-    background: var(--color-primary);
-    color: var(--color-white);
-    transform: translateY(-1px);
+    background: #1A252F;  /* Darker on hover */
+    color: #FFFFFF;
+    transform: translateY(-2px);  /* Lift effect */
+    box-shadow: 0 4px 12px rgba(44, 62, 80, 0.4);  /* Enhanced shadow */
 }
 
 /* ========== Product Info - More Padding ========== */
@@ -820,16 +821,27 @@ const addToCart = () => {
     border-color: var(--color-primary-light);
 }
 
-/* ========== Responsive Design ========== */
-@media (max-width: 1200px) {
+/* ========== Responsive Design - 4 Products Per Row ========== */
+
+/* Desktop (1200px+): 4 products per row */
+@media (max-width: 1200px) and (min-width: 993px) {
     .product-card {
-        flex: 0 0 calc(25% - var(--space-md));
+        flex: 0 0 calc(33.333% - 8px);  /* 3 products per row */
+    }
+    
+    .products-grid {
+        gap: 12px;
     }
 }
 
-@media (max-width: 992px) {
+/* Tablet (992px): 3 products per row */
+@media (max-width: 992px) and (min-width: 769px) {
     .product-card {
-        flex: 0 0 calc(33.333% - var(--space-md));
+        flex: 0 0 calc(33.333% - 8px);  /* 3 products per row */
+    }
+    
+    .products-grid {
+        gap: 12px;
     }
 
     .product-detail-content {
@@ -837,9 +849,18 @@ const addToCart = () => {
     }
 }
 
-@media (max-width: 768px) {
+/* Mobile landscape (768px): 2 products per row */
+@media (max-width: 768px) and (min-width: 577px) {
     .product-card {
-        flex: 0 0 calc(50% - var(--space-md));
+        flex: 0 0 calc(50% - 6px);  /* 2 products per row */
+    }
+    
+    .products-grid {
+        gap: 12px;
+    }
+    
+    .product-image-container {
+        aspect-ratio: 3/4;  /* Portrait on mobile */
     }
 
     .san-pham-ban-chay {
@@ -847,9 +868,24 @@ const addToCart = () => {
     }
 }
 
+/* Mobile portrait (576px): 2 products per row */
 @media (max-width: 576px) {
     .product-card {
-        flex: 0 0 100%;
+        flex: 0 0 calc(50% - 6px);  /* Keep 2 per row, not 1 */
+    }
+    
+    .products-grid {
+        gap: 12px;
+    }
+    
+    .product-image-container {
+        aspect-ratio: 3/4;  /* Portrait on small mobile */
+    }
+    
+    .overlay-btn {
+        padding: 8px 16px;
+        font-size: 12px;
+        min-width: 100px;
     }
 
     .custom-arrow {

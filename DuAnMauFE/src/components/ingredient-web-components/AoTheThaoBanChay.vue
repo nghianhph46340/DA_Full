@@ -32,13 +32,8 @@
                                                     :to="{ name: 'sanPhamDetail-BanHang', params: { id: product.id } }"
                                                     class="overlay-btn view-btn">
                                                     <eye-outlined />
-                                                    <span>Xem</span>
+                                                    <span>Xem chi tiết</span>
                                                 </router-link>
-                                                <button class="overlay-btn cart-btn"
-                                                    @click="showProductDetail(product)">
-                                                    <shopping-cart-outlined />
-                                                    <span>Thêm</span>
-                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -225,7 +220,7 @@ const bestSellingProducts = ref([]);
 // Nếu slide cuối không đủ 5 sản phẩm, lấy thêm từ đầu danh sách
 const productSlides = computed(() => {
     const slides = [];
-    const productsPerSlide = 5;
+    const productsPerSlide = 4;  // ✅ 4 products per slide
     const products = [...bestSellingProducts.value];
 
     // Nếu slide cuối không đủ 5 sản phẩm, lấy thêm từ đầu danh sách
@@ -372,13 +367,13 @@ const addToCart = () => {
     padding: 0;
     display: flex;
     flex-wrap: wrap;
-    gap: 32px;
+    gap: 12px;  /* ✅ Match SanPhamBanChay */
     margin-bottom: 48px;
 }
 
 .product-card {
     position: relative;
-    flex: 0 0 calc(20% - 26px);
+    flex: 0 0 calc(25% - 9px);  /* ✅ 4 products per row */
     background-color: #FFFFFF;
     border-radius: 8px;
     overflow: hidden;
@@ -504,32 +499,38 @@ const addToCart = () => {
 
 .overlay-buttons {
     display: flex;
-    justify-content: space-around;
+    justify-content: center;  /* ✅ Centered */
 }
 
 .overlay-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: white;
+    background: #2C3E50;  /* ✅ Dark elegant color */
     border: none;
-    border-radius: 20px;
-    padding: 5px 12px;
-    font-size: 12px;
-    font-weight: 500;
-    color: #333;
+    border-radius: 6px;
+    padding: 10px 24px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #FFFFFF;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
     text-decoration: none;
-}
-
-.overlay-btn:hover {
-    background: #3a86ff;
-    color: white;
+    min-width: 140px;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.3);
 }
 
 .overlay-btn span {
     margin-left: 5px;
+}
+
+.overlay-btn:hover {
+    background: #1A252F;
+    color: #FFFFFF;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(44, 62, 80, 0.4);
 }
 
 .product-info {

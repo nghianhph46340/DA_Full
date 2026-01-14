@@ -178,7 +178,7 @@
             </a-select>
           </div>
           <a-row :gutter="[24, 24]">
-            <a-col v-for="product in displayedProducts" :key="product.id" :xs="24" :sm="12" :md="8" :lg="6">
+            <a-col v-for="product in displayedProducts" :key="product.id" :xs="24" :sm="12" :md="8" :lg="6" :xl="6" :xxl="6">
               <div class="product-card" @mouseenter="activeProduct = product.id" @mouseleave="activeProduct = null">
                 <div class="product-image-container">
                   <img class="product-image" :src="product.image" alt="Product image">
@@ -189,11 +189,7 @@
                     <div class="overlay-buttons">
                       <button class="overlay-btn view-btn" @click="router.push('/sanphamdetail/' + product.id)">
                         <eye-outlined />
-                        <span>Xem</span>
-                      </button>
-                      <button class="overlay-btn cart-btn">
-                        <shopping-cart-outlined />
-                        <span>Thêm</span>
+                        <span>Xem chi tiết</span>
                       </button>
                     </div>
                   </div>
@@ -1272,11 +1268,12 @@ const resetFilters = async () => {
   overflow: hidden;
   border-radius: 8px;
   margin-bottom: 12px;
+  aspect-ratio: 3 / 4;  /* ✅ Taller portrait images */
 }
 
 .product-image {
   width: 100%;
-  height: 220px;
+  height: 100%;
   object-fit: cover;
   border-radius: 8px;
   transition: transform 0.5s ease;
@@ -1317,22 +1314,26 @@ const resetFilters = async () => {
 
 .overlay-buttons {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;  /* ✅ Centered */
 }
 
 .overlay-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: white;
+  background: #2C3E50;  /* ✅ Dark elegant color */
   border: none;
-  border-radius: 20px;
-  padding: 5px 12px;
-  font-size: 12px;
-  font-weight: 500;
-  color: #333;
+  border-radius: 6px;
+  padding: 10px 24px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #FFFFFF;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  min-width: 140px;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  box-shadow: 0 2px 8px rgba(44, 62, 80, 0.3);
 }
 
 .overlay-btn span {
@@ -1340,8 +1341,10 @@ const resetFilters = async () => {
 }
 
 .overlay-btn:hover {
-  background: #3a86ff;
-  color: white;
+  background: #1A252F;
+  color: #FFFFFF;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(44, 62, 80, 0.4);
 }
 
 .product-info {

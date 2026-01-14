@@ -13,10 +13,20 @@ import java.util.Optional;
 
 public interface KhachHangRepo extends JpaRepository<KhachHang, Integer> {
 
-    @Query(nativeQuery = true, value = "SELECT id_khach_hang, ma_khach_hang, ho_ten as tenKhachHang, ngay_sinh, email, gioi_tinh, so_dien_thoai, trang_thai FROM khach_hang")
+    // ✅ Explicit CAST to BIT ensures Boolean response (works for both BIT and
+    // nvarchar columns)
+    @Query(nativeQuery = true, value = "SELECT id_khach_hang, ma_khach_hang, ho_ten as tenKhachHang, " +
+            "ngay_sinh, email, " +
+            "CAST(CASE WHEN gioi_tinh = 1 OR gioi_tinh = '1' OR LOWER(gioi_tinh) = N'nam' THEN 1 ELSE 0 END AS BIT) as gioiTinh, "
+            +
+            "so_dien_thoai, trang_thai FROM khach_hang")
     List<KhachHangResponse> getAll();
 
-    @Query(nativeQuery = true, value = "SELECT id_khach_hang, ma_khach_hang, ho_ten as tenKhachHang , ngay_sinh, email, gioi_tinh, so_dien_thoai, trang_thai FROM khach_hang")
+    @Query(nativeQuery = true, value = "SELECT id_khach_hang, ma_khach_hang, ho_ten as tenKhachHang, " +
+            "ngay_sinh, email, " +
+            "gioi_tinh as gioiTinh, "
+            +
+            "so_dien_thoai, trang_thai FROM khach_hang")
     Page<KhachHangResponse> listPT(Pageable pageable);
 
     @Query(nativeQuery = true, value = "SELECT * FROM khach_hang WHERE " +
@@ -47,7 +57,9 @@ public interface KhachHangRepo extends JpaRepository<KhachHang, Integer> {
 
     // Kiểm tra tồn tại
     boolean existsByEmail(String email);
+
     boolean existsBySoDienThoai(String soDienThoai);
+
     boolean existsByTenDangNhap(String tenDangNhap);
 
 }

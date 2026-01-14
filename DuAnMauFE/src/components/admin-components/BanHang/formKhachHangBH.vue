@@ -107,11 +107,12 @@
 
         <!-- Nút hành động -->
         <div class="action-buttons-wrapper">
-          <a-button type="default" size="large" class="btn-add-customer" @click="confirmThemKhachHang">
-            <template #icon>
+          <a-button type="default" size="large" class="btn-add-customer" @click="confirmThemKhachHang"
+            :loading="isAddingCustomer" :disabled="isAddingCustomer">
+            <template #icon v-if="!isAddingCustomer">
               <user-add-outlined />
             </template>
-            Thêm khách mới
+            {{ isAddingCustomer ? 'Đang thêm...' : 'Thêm khách mới' }}
           </a-button>
 
           <a-button type="primary" size="large" class="btn-save-info" @click="luuThongTinKhachHang"
@@ -181,6 +182,7 @@ const calculatedShippingFee = ref(0);
 const provinces = ref([]);
 const districts = ref([]);
 const wards = ref([]);
+const isAddingCustomer = ref(false);  // ✅ Loading state for add customer
 
 const formData = reactive({
   maKhachHang: '',
@@ -622,21 +624,36 @@ const themKhachHang = async () => {
     return;
   }
 
-  const dataToSend = { ...formData };
+  // ✅ Start loading
+  isAddingCustomer.value = true;
+
+  // ✅ Map tenKhachHang → hoTen for backend compatibility
+  const dataToSend = {
+    ...formData,
+    hoTen: formData.tenKhachHang  // Backend expects 'hoTen'
+  };
   console.log("datagui:", dataToSend);
   try {
     const result = await gbStore.themKhachHangBH(dataToSend);
     await new Promise(resolve => setTimeout(resolve, 500));
-    const idHoaDon = gbStore.getCurrentHoaDonId();
+    const idHoaDon = localStorage.getItem('currentInvoiceId')
     const diaChiList = formData.diaChiList.map(diaChi => {
       return `${diaChi.soNha}, ${diaChi.xaPhuong}, ${diaChi.quanHuyen}, ${diaChi.tinhThanhPho}`;
     });
-    const newKhachHang = await gbStore.getLatestKhachHang();
-    const idKH = newKhachHang ? newKhachHang.idKhachHang : null;
-    await gbStore.addKHHD(idHoaDon, idKH, diaChiList, formData.tenKhachHang, formData.soDienThoai, formData.email);
-    localStorage.setItem('luuTTKHBH', JSON.stringify(true));
-    localStorage.setItem('khachHangBH', JSON.stringify(dataToSend));
+    //const newKhachHang = await gbStore.getLatestKhachHang();
+
     if (result) {
+      console.log("result:", result);
+
+      // ✅ Get customer ID directly from result (not nested)
+      const idKH = result.idKhachHang;
+
+      // ✅ Add customer to invoice
+      await gbStore.addKHHD(idHoaDon, idKH, diaChiList, formData.tenKhachHang, formData.soDienThoai, formData.email);
+
+      localStorage.setItem('luuTTKHBH', JSON.stringify(true));
+      localStorage.setItem('khachHangBH', JSON.stringify(dataToSend));
+
       toast.success('Thêm khách hàng thành công!', {
         autoClose: 2000,
         position: 'top-right'
@@ -661,6 +678,9 @@ const themKhachHang = async () => {
     } else {
       toast.error(`Có lỗi xảy ra: ${error.message || 'Không thể kết nối đến server'}`);
     }
+  } finally {
+    // ✅ Stop loading (always runs)
+    isAddingCustomer.value = false;
   }
 };
 
